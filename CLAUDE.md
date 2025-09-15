@@ -25,14 +25,14 @@ After every step make sure to mark the step as done and continue with the next. 
 - [ ] Create comprehensive implementation plan in overview.md based on expert consultation
 - [ ] Make sure that user is happy with the plan presented in overview.md
 - [ ] Implementation of overview.md with user
-- [ ] Testing and validation
-- [ ] Documentation completion
+- [ ] Reviewing with internal agent against issue.md
+- [ ] Update sub-agents based on changes
 
 ### Further Information
 
 #### Session Management
 
-It can happen that you are entering an already worked on session, based on the session folder. Check the branch and files to make sure in which step we are and make sure the information is accurate.
+It can happen that you are entering an already worked on session, based on the session folder. Check the branch and files to make sure in which step we are and make sure the information is accurate. Sessions are documented in `.claude/sessions/`.
 
 #### Branch Management Protocol
 
@@ -42,7 +42,7 @@ It can happen that you are entering an already worked on session, based on the s
    - **STOP IMMEDIATELY** - Do not proceed with feature work
    - Instruct user to create feature branch first
    - Verify no uncommitted changes: `git status`
-   - Create and switch to feature branch: `git checkout -b feature/SWATCA-XXX-descriptive-name`
+   - Create and switch to feature branch: `git checkout -b feature/CLAUDE-XXX-descriptive-name`
 3. If on feature branch:
    - Verify branch name follows convention
    - Proceed with session setup
