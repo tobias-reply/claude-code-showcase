@@ -7,15 +7,34 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is the `claude-code-showcase` repository containing specialized agents for security and AWS AgentCore analysis, along with a comprehensive development workflow for feature-based development.
 
 ## 🚨 MANDATORY WORKFLOW PROTOCOL
+**When working on features and consulting sub-agents this protocol is mandatory. Make sure to always update the overview.md which each step and don't skip steps mentioned in this guide!**
 
-### Session Management
+After every step make sure to mark the step as done and continue with the next. Don't skip steps.
 
-**Session Naming Convention**: `.claude/sessions/XXX/overview.md`
-- **XXX** = Current Git branch name (e.g., `feature/SWATCA-123-comment-processing`)
-- **Purpose**: Easy navigation back to session context across development lifecycle
-- **Structure**: Each session contains overview.md + specialized agent findings
+- [ ] Feature branch created
+- [ ] Session directory created
+- [ ] Issue requirements documented
+- [ ] Initial overview created baseed on `.claude/sessions/example/overview.md`
+- [ ] Presented all experts to user and decided which experts to consult in what order
+- [ ] Expert consultations
+   - [ ] Expert consultation 1
+   - [ ] Transcribe expert analysis 1 to overview.md
+   - [ ] Expert consultation 2
+   - [ ] Transcribe expert analysis 2 to overview.md
+   - ...
+- [ ] Create comprehensive implementation plan in overview.md based on expert consultation
+- [ ] Make sure that user is happy with the plan presented in overview.md
+- [ ] Implementation of overview.md with user
+- [ ] Testing and validation
+- [ ] Documentation completion
 
-### Branch Management Protocol
+### Further Information
+
+#### Session Management
+
+It can happen that you are entering an already worked on session, based on the session folder. Check the branch and files to make sure in which step we are and make sure the information is accurate.
+
+#### Branch Management Protocol
 
 **Before Starting Any Feature Work**:
 1. Check current branch: `git branch --show-current`
@@ -28,33 +47,32 @@ This is the `claude-code-showcase` repository containing specialized agents for 
    - Verify branch name follows convention
    - Proceed with session setup
 
-### Phase 1: Task Initialization
+#### Task Initialization / Session Management
 
 1. **Main Agent** starts working on ticket/issue
 2. **MANDATORY BRANCH CHECK**: If currently on main branch, STOP and instruct user to create feature branch first
    - Feature branch naming: `feature/CLAUDE-XXX-descriptive-name`
    - Example: `feature/CLAUDE-001-bedrock-lambda-scaffold`
    - **DO NOT PROCEED** until proper feature branch is created and checked out
-3. **Create session directory**: `.claude/sessions/[BRANCH_NAME]/`
-4. **Create issue file**: `.claude/sessions/[BRANCH_NAME]/issue.md`
-5. **Document initial requirements with user in issue.md file**: 
+   - Check if a similar branch already exists, if yes swatch to this one
+4. Check if there was already a session in place. if yes simply check the accuracy of already made progress
+3. **If it doesn't exist yet, create session directory**: `.claude/sessions/[BRANCH_NAME]/`
+   - Exmaple: `.claude/sessions/feature-CLAUDE-001-bedrock-lambda-scaffold`
+4. **Create/update initial requirements in issue.md file**: 
    - Ticket details and acceptance criteria
    - Technical scope and constraints
    - Initial architectural thoughts
-6. **Create overview file**: `.claude/sessions/[BRANCH_NAME]/overview.md`
-7. **Maintain session in overview.md file**: Update overview.md throughout development process with key findings and decisions from experts
+5. **Create/update overview file**: using `.claude/sessions/example/overview.md` as template edit the real `.claude/sessions/[BRANCH_NAME]/overview.md
+6. **Maintain session in overview.md file**: Update overview.md THROUGHOUT the development process with key findings and decisions from experts
 
-### Phase 2: Expert Consultation
+#### Expert Consultation
 
-#### Sub-Agent Usage Protocol
+1. **ALWAYS ask user which experts are needed** - ALWAYS give them a list of ALL available experts and provide your recommendation - but inquire what they think we need. Also ask them for the order in which to call them
+3. **ALWAYS INTEGRATE EXPERT FINDINGS IMMEDIATELY INTO overview.md** - after calling an agent and before calling the next agent ALWAYS read and integrate key findings from each agent's analysis file into the session overview.md so the next agent can use the information from the previous agent
+4. **Invoke agents sequentially** using the simplified protocol
+5. **Proceed to next phase** if the user is happy with the overview.md
 
-1. **Determine which agents are needed** based on the feature requirements
-2. **Ask user for agent consultation order** - which agents should be consulted and in what sequence
-3. **Invoke agents sequentially** using the simplified protocol
-4. **Read and integrate findings** from each agent's analysis file into session overview.d directly after the consultation, before calling the next agent
-6. **Proceed with implementation** based on expert guidance, if the user is happy with the overview.md
-
-### Phase 3: Implementation Integration
+#### Implementation
 
 1. **Review consolidated findings** in overview.md with user
 2. **Confirm implementation approach** based on expert recommendations
@@ -62,7 +80,7 @@ This is the `claude-code-showcase` repository containing specialized agents for 
 4. **Update session documentation** with implementation decisions and outcomes
 5. **Validate implementation** meets requirements and expert recommendations
 
-### Phase 4: Code Review and Validation
+#### Code Review and Validation
 
 1. **Internal Code Review**: Use internal /review command to compare made changes to the `.claude/sessions/[BRANCH_NAME]/issue.md`
 2. **Present findings to user**: Communicate implementation results and any deviations from original plan
@@ -70,7 +88,7 @@ This is the `claude-code-showcase` repository containing specialized agents for 
 4. **Update overview.md**: Document review outcomes and user feedback
 5. **Proceed only after user approval**
 
-### Phase 5: Session Completion and Evolution
+#### Session Completion and Evolution
 
 1. **Main Agent reviews**: Complete session outcomes in overview.md
 2. **Document learnings**: Capture patterns and insights for future sessions
@@ -89,7 +107,7 @@ This is the `claude-code-showcase` repository containing specialized agents for 
 
 **Main Agent Action**: Read the comprehensive findings file and integrate into session overview
 
-## Available Sub-Agents
+## Available Experts
 
 **MANDATORY**: The main agent MUST use the appropriate sub-agents for specific tasks. Each sub-agent has specialized knowledge and capabilities for their domain.
 
