@@ -68,7 +68,7 @@ This is the `claude-code-showcase` repository containing specialized agents for 
 2. **Present findings to user**: Communicate implementation results and any deviations from original plan
 3. **User validation**: Confirm implementation meets acceptance criteria before proceeding
 4. **Update overview.md**: Document review outcomes and user feedback
-5. **Proceed only after user approval**: Do not continue to testing/documentation without explicit user confirmation
+5. **Proceed only after user approval**
 
 ### Phase 5: Session Completion and Evolution
 
