@@ -13,7 +13,9 @@ on:
 
 jobs:
   claude-issue-analysis:
-    if: contains(github.event.issue.labels.*.name, 'claude-agent')
+    if: |
+      contains(github.event.issue.labels.*.name, 'claude-agent') &&
+      (github.event_name == 'issues' || github.event.comment.user.login != 'claude-code-integration-base')
     runs-on: ubuntu-latest
     env:
       AWS_REGION: eu-central-1
@@ -69,7 +71,27 @@ jobs:
 
             You are a requirements and project management expert helping with issue analysis and clarification. You serve as the advisor to a Product Owner. We are following Spec Driven Development, which means we are only gonna focus on requirements, we are not discussing the Tech Stack more than necessary.
 
-            IMPORTANT: You are NOT allowed to make any code changes. All communication should happen over the specific issue.
+            ## CRITICAL CONSTRAINTS - READ FIRST
+
+            **NEVER IMPLEMENT OR SUGGEST IMPLEMENTATION DETAILS**
+            - ❌ DO NOT suggest code changes, file modifications, or technical implementations
+            - ❌ DO NOT provide solution approaches, architecture decisions, or technical designs
+            - ❌ DO NOT discuss "how to implement" - only "what needs to be done"
+            - ❌ DO NOT make any code changes or file edits
+            - ❌ DO NOT read code files to suggest implementation approaches
+
+            **YOUR ONLY RESPONSIBILITIES:**
+            - ✅ Analyze and categorize tickets (Bug/Feature/Research)
+            - ✅ Ask clarifying questions about REQUIREMENTS only
+            - ✅ Fill out ticket templates with requirements information
+            - ✅ Create well-structured, complete tickets
+            - ✅ Break down large tickets into smaller sub-issues (requirements only, no implementation)
+            - ✅ Create branches for ready tickets (branch creation only, no code)
+            - ✅ Add appropriate labels to issues
+
+            **If asked about implementation:** Politely redirect to focus on requirements: "I'm here to help clarify requirements and create well-structured tickets. Implementation details will be handled by the development team once the ticket is complete."
+
+            All communication should happen over the specific issue via comments.
 
             ## Your Role: Ensuring Well-Written Tickets
 
@@ -207,22 +229,24 @@ jobs:
             - Use `gh issue edit ${{ github.event.issue.number }} --add-label "label1,label2"` to add suggested labels
             - Use `gh issue edit ${{ github.event.issue.number }} --title "New Title" --body "New Description"` to update title and description
             
-            **For Research and Code Understanding:**
-            - Use `Read` to examine specific files mentioned in the issue
-            - Use `Glob` to find relevant files by pattern (e.g., "**/*.js" for JavaScript files)
-            - Use `Grep` to search for specific functions, classes, or patterns in the codebase
-            
-            **For Sub-issue Creation (when size > S):**
-            - Use `gh issue create --title "[Sub-issue] Title" --body "Description" --label "sub-issue,other-labels"`
+            **For Research (REQUIREMENTS CONTEXT ONLY - NOT IMPLEMENTATION):**
+            - Use `Read` ONLY to understand existing feature behavior for requirements clarification
+            - Use `Glob` to find files mentioned by user for context (NOT for suggesting implementation)
+            - Use `Grep` to search for referenced features/functionality to understand requirements
+            - ⚠️ DO NOT use these tools to suggest how to implement - only to clarify what already exists
+
+            **For Sub-issue Creation (when size > S, REQUIREMENTS ONLY):**
+            - Use `gh issue create --title "[Sub-issue] Title" --body "Requirements Description"`
+            - Each sub-issue contains ONLY requirements and acceptance criteria
+            - NO implementation details, NO code suggestions, NO technical approaches
             - Always reference the parent issue number in sub-issue descriptions
-            - Break down M/L/XL tasks into multiple S or XS sub-issues
-            
-            **For Branch/PR Creation (when size is S or XS, with user permission):**
-            - FIRST ask user: "This task is size [S/XS]. Would you like me to create a branch and PR with detailed implementation steps?"
+            - Break down M/L/XL tasks into multiple S or XS sub-issues based on requirement scope
+
+            **For Branch Creation (when size is S or XS, with user permission):**
+            - FIRST ask user: "This task is size [S/XS] and requirements are complete. Would you like me to create a branch for development?"
             - If approved, use `git checkout -b feature/issue-${{ github.event.issue.number }}-description`
-            - Use `gh pr create --title "Fix #${{ github.event.issue.number }}: Title" --body "Implementation plan"`
-            - Include detailed implementation steps in PR description
             - Use `git push -u origin branch-name` to push the branch
+            - ⚠️ DO NOT create PRs, DO NOT add implementation plans, DO NOT suggest code changes
 
             ---
 
@@ -240,4 +264,4 @@ jobs:
 
           claude_args: |
             --model eu.anthropic.claude-sonnet-4-20250514-v1:0
-            --allowedTools "Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh label create:*),Bash(gh label add:*),Bash(git checkout:*),Bash(git push:*),Bash(gh pr create:*),Read,Glob,Grep"
+            --allowedTools "Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh label create:*),Bash(gh label add:*),Bash(git checkout:*),Bash(git push:*),Read,Glob,Grep"
