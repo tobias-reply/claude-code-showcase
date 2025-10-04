@@ -15,7 +15,8 @@ jobs:
   claude-issue-analysis:
     if: |
       !contains(github.event.issue.labels.*.name, 'no-claude-agent') &&
-      (github.event_name == 'issues' || (github.event_name == 'issue_comment' && github.event.comment.user.login != 'claude-code-integration-base'))
+      github.actor != 'claude-code-integration-base' &&
+      github.actor != 'claude-code-integration-base[bot]'
     runs-on: ubuntu-latest
     env:
       AWS_REGION: eu-central-1
@@ -253,8 +254,11 @@ jobs:
             - NO implementation details, NO code suggestions, NO technical approaches
             - Always reference the parent issue number in sub-issue descriptions
             - Break down M/L/XL tasks into multiple S or XS sub-issues based on requirement scope
+            - ⚠️ **PARENT ISSUES WITH SUB-ISSUES NEVER GET BRANCHES** - only the individual sub-issues get branches
 
             **For Branch Creation (when size is S or XS, with user permission):**
+            - **CRITICAL**: Only create branches for issues WITHOUT sub-issues
+            - ⚠️ **NEVER create a branch for a parent issue that has sub-issues** - each sub-issue will have its own branch
             - FIRST ask user: "This task is size [S/XS] and requirements are complete. Would you like me to create a branch for development?"
             - If approved, use `git checkout -b feature/issue-${{ github.event.issue.number }}-description`
             - Use `git push -u origin branch-name` to push the branch
