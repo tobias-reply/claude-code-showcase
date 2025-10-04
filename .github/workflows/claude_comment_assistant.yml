@@ -1,4 +1,4 @@
-name: Claude PR Action
+name: Claude Comment Assistant
 
 permissions:
   contents: write
@@ -39,6 +39,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: eu-central-1
+          audience: sts.amazonaws.com
 
       - uses: anthropics/claude-code-action@v1
         with:
