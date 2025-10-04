@@ -22,7 +22,7 @@ This is the `claude-code-showcase` repository containing specialized agents for 
    - Verify branch name follows convention
    - Proceed with session setup
 4. Present all possible experts and let the user choose which ones to consult
-5. Copy .claude/sessions/example/overview.md into the feature branch
+5. Copy .claude/sessions/example/overview.md AS IS into the feature branch: `cp .claude/sessions/example/overview.md .claude/sessions/feature/CLAUDE-XXX-descriptive-name/overview.md`
 6. Act according to the steps documented in the overview.md Don't skip steps and always mark a step as done when finished.
 
 ### Further Information
@@ -64,23 +64,6 @@ It can happen that you are entering an already worked on session, based on the s
 - **Output file**: `.claude/sessions/[BRANCH_NAME]/agentcore-analysis.md`
 - **Available tools**: Read, Edit, Write, Grep, TodoWrite
 - **Knowledge base**: Complete AgentCore service documentation, deployment patterns, best practices
-
-### File Structure
-
-```
-.claude/
-├── agents/
-│   ├── security-expert.md
-│   └── agentcore-expert.md
-├── sessions/
-│   └── [BRANCH_NAME]/
-│       ├── issue.md
-│       ├── overview.md
-│       ├── security-analysis.md (if security expert consulted)
-│       └── agentcore-analysis.md (if agentcore expert consulted)
-└── knowledge/
-    └── agentcore.pdf
-```
 
 ## Critical Requirements
 
