@@ -9,32 +9,7 @@ This is the `claude-code-showcase` repository containing specialized agents for 
 ## 🚨 MANDATORY WORKFLOW PROTOCOL
 **When working on features and consulting sub-agents this protocol is mandatory. Make sure to always update the overview.md which each step and don't skip steps mentioned in this guide!**
 
-After every step make sure to mark the step as done and continue with the next. Don't skip steps.
-
-- [ ] Feature branch created
-- [ ] Session directory created
-- [ ] Issue requirements documented
-- [ ] Initial overview created baseed on `.claude/sessions/example/overview.md`
-- [ ] Presented all experts to user and decided which experts to consult in what order
-- [ ] Expert consultations
-   - [ ] Expert consultation 1
-   - [ ] Transcribe expert analysis 1 to overview.md
-   - [ ] Expert consultation 2
-   - [ ] Transcribe expert analysis 2 to overview.md
-   - ...
-- [ ] Create comprehensive implementation plan in overview.md based on expert consultation
-- [ ] Make sure that user is happy with the plan presented in overview.md
-- [ ] Implementation of overview.md with user
-- [ ] Reviewing with internal agent against issue.md
-- [ ] Update sub-agents based on changes
-
-### Further Information
-
-#### Session Management
-
-It can happen that you are entering an already worked on session, based on the session folder. Check the branch and files to make sure in which step we are and make sure the information is accurate. Sessions are documented in `.claude/sessions/`.
-
-#### Branch Management Protocol
+### Branch Management Protocol
 
 **Before Starting Any Feature Work**:
 1. Check current branch: `git branch --show-current`
@@ -46,54 +21,15 @@ It can happen that you are entering an already worked on session, based on the s
 3. If on feature branch:
    - Verify branch name follows convention
    - Proceed with session setup
+4. Present all possible experts and let the user choose which ones to consult
+5. Copy .claude/sessions/example/overview.md into the feature branch
+6. Act according to the steps documented in the overview.md Don't skip steps and always mark a step as done when finished.
 
-#### Task Initialization / Session Management
+### Further Information
 
-1. **Main Agent** starts working on ticket/issue
-2. **MANDATORY BRANCH CHECK**: If currently on main branch, STOP and instruct user to create feature branch first
-   - Feature branch naming: `feature/CLAUDE-XXX-descriptive-name`
-   - Example: `feature/CLAUDE-001-bedrock-lambda-scaffold`
-   - **DO NOT PROCEED** until proper feature branch is created and checked out
-   - Check if a similar branch already exists, if yes swatch to this one
-4. Check if there was already a session in place. if yes simply check the accuracy of already made progress
-3. **If it doesn't exist yet, create session directory**: `.claude/sessions/[BRANCH_NAME]/`
-   - Exmaple: `.claude/sessions/feature-CLAUDE-001-bedrock-lambda-scaffold`
-4. **Create/update initial requirements in issue.md file**: 
-   - Ticket details and acceptance criteria
-   - Technical scope and constraints
-   - Initial architectural thoughts
-5. **Create/update overview file**: using `.claude/sessions/example/overview.md` as template edit the real `.claude/sessions/[BRANCH_NAME]/overview.md
-6. **Maintain session in overview.md file**: Update overview.md THROUGHOUT the development process with key findings and decisions from experts
+#### Session Management
 
-#### Expert Consultation
-
-1. **ALWAYS ask user which experts are needed** - ALWAYS give them a list of ALL available experts and provide your recommendation - but inquire what they think we need. Also ask them for the order in which to call them
-3. **ALWAYS INTEGRATE EXPERT FINDINGS IMMEDIATELY INTO overview.md** - after calling an agent and before calling the next agent ALWAYS read and integrate key findings from each agent's analysis file into the session overview.md so the next agent can use the information from the previous agent
-4. **Invoke agents sequentially** using the simplified protocol
-5. **Proceed to next phase** if the user is happy with the overview.md
-
-#### Implementation
-
-1. **Review consolidated findings** in overview.md with user
-2. **Confirm implementation approach** based on expert recommendations
-3. **Integrate changes** collaboratively with user guidance
-4. **Update session documentation** with implementation decisions and outcomes
-5. **Validate implementation** meets requirements and expert recommendations
-
-#### Code Review and Validation
-
-1. **Internal Code Review**: Use internal /review command to compare made changes to the `.claude/sessions/[BRANCH_NAME]/issue.md`
-2. **Present findings to user**: Communicate implementation results and any deviations from original plan
-3. **User validation**: Confirm implementation meets acceptance criteria before proceeding
-4. **Update overview.md**: Document review outcomes and user feedback
-5. **Proceed only after user approval**
-
-#### Session Completion and Evolution
-
-1. **Main Agent reviews**: Complete session outcomes in overview.md
-2. **Document learnings**: Capture patterns and insights for future sessions
-3. **Archive session**: Maintain session files for future reference
-4. **Agent evolution**: Note any gaps or improvements needed in agent capabilities. Changes in code, architecture and infrastructure should be present in the `.claude/agents/` experts. With the help of the user update their knowledge.
+It can happen that you are entering an already worked on session, based on the session folder. Check the branch and files to make sure in which step we are and make sure the information is accurate. Sessions are documented in `.claude/sessions/`.
 
 ## Agent Communication Protocol
 
@@ -156,10 +92,3 @@ It can happen that you are entering an already worked on session, based on the s
 - **ALWAYS consult user at important points**
 - **Agents must write ALL findings to analysis files**
 - **Agent responses must be file paths only**
-
-## Development Commands
-
-Commands will be established as the project grows:
-- Build commands (TBD)
-- Testing commands (TBD)
-- Linting and formatting (TBD)

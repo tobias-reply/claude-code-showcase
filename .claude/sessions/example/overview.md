@@ -3,10 +3,32 @@
 **Branch**: `[BRANCH_NAME]`
 **Ticket**: #[TICKET_NUMBER] - [TICKET_DESCRIPTION]
 
-## Ticket Requirements
+## Session Progress
 
-### Description
-[Brief description of what needs to be implemented or fixed]
+- [X] Presented all experts to user and decided which experts to consult in what order
+- [X] Branch created
+- [X] Session directory created
+- [ ] Adjusted Session Progress based on the experts that need to be consulted
+- [ ] Issue requirements documented
+- [ ] Initial overview from `.claude/sessions/example/overview.md` copied to directory
+- [ ] Expert consultations
+   - [ ] Expert consultation 1
+   - [ ] Transcribe expert analysis 1 to overview.md
+   - [ ] Expert consultation 2
+   - [ ] Transcribe expert analysis 2 to overview.md
+   - ...
+- [ ] Create comprehensive implementation plan in overview.md based on expert consultation
+- [ ] Make sure that user is happy with the plan presented in overview.md
+- [ ] Implementation of overview.md with user
+- [ ] Testing and validation
+- [ ] Review sub-agents based on branch changes
+   - [ ] Ask the user if new sub-agents should be built in .claude/agents based on .claude/agents/expert_template.md
+   - [ ] Edit the knowledge of existing agents in .claude/agents
+- [ ] Update readmes
+
+## Brief Summary
+
+[What needs to be built/fixed and why]
 
 ### Requirements/Tasks
 1. **[Primary Requirement 1]**
@@ -21,16 +43,21 @@
    - [Implementation details]
    - [Dependencies or constraints]
 
-### Acceptance Criteria
-- [ ] [Specific measurable outcome 1]
-- [ ] [Specific measurable outcome 2] 
-- [ ] [Specific measurable outcome 3]
-- [ ] [Documentation and testing requirements]
+## Acceptance Criteria
 
-### Technical Scope and Constraints
-- [Technical limitation or constraint 1]
-- [Technical limitation or constraint 2]
-- [Environment or dependency requirements]
+- [ ] [Measurable outcome 1]
+- [ ] [Measurable outcome 2]
+- [ ] [Measurable outcome 3]
+
+## When Closing (Required)
+
+- [ ] [Proof of completion - screenshots, URLs, etc.]
+- [ ] [Code changes link]
+- [ ] [Additional verification items]
+
+## Implementation Approach
+
+[How this will be implemented - sub-issues, technology choices, strategy]
 
 ## Session Initialization
 
@@ -72,21 +99,3 @@ Based on the requirements, we need consultation from:
 
 *To be documented as implementation proceeds*
 
-## Session Progress
-
-- [X] Feature branch created
-- [X] Session directory created
-- [X] Issue requirements documented
-- [X] Initial overview created baseed on `.claude/sessions/example/overview.md`
-- [X] Presented all experts to user and decided which experts to consult in what order
-- [ ] Expert consultations
-   - [ ] Expert consultation 1
-   - [ ] Transcribe expert analysis 1 to overview.md
-   - [ ] Expert consultation 2
-   - [ ] Transcribe expert analysis 2 to overview.md
-   - ...
-- [ ] Create comprehensive implementation plan in overview.md based on expert consultation
-- [ ] Make sure that user is happy with the plan presented in overview.md
-- [ ] Implementation of overview.md with user
-- [ ] Testing and validation
-- [ ] Documentation completion
