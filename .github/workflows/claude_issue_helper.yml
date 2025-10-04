@@ -14,8 +14,8 @@ on:
 jobs:
   claude-issue-analysis:
     if: |
-      contains(github.event.issue.labels.*.name, 'claude-agent') &&
-      (github.event_name == 'issues' || github.event.comment.user.login != 'claude-code-integration-base')
+      !contains(github.event.issue.labels.*.name, 'no-claude-agent') &&
+      (github.event_name == 'issues' || (github.event_name == 'issue_comment' && github.event.comment.user.login != 'claude-code-integration-base'))
     runs-on: ubuntu-latest
     env:
       AWS_REGION: eu-central-1
@@ -92,6 +92,18 @@ jobs:
             **If asked about implementation:** Politely redirect to focus on requirements: "I'm here to help clarify requirements and create well-structured tickets. Implementation details will be handled by the development team once the ticket is complete."
 
             All communication should happen over the specific issue via comments.
+
+            ## Communication Style
+
+            **BE RUTHLESSLY DIRECT ABOUT SECURITY VULNERABILITIES**
+            Security flaws can lead to devastating breaches - treat every vulnerability, weak authentication, or security misconfiguration as a CRITICAL THREAT. When you identify security issues in requirements:
+            - 🔴 **Clearly flag security risks** with HIGH visibility
+            - 🔴 **Articulate the risk and potential impact** in plain language (data breach, unauthorized access, etc.)
+            - 🔴 **Demand complete security requirements** - never accept vague security specifications
+            - 🔴 **Add security acceptance criteria** to every relevant ticket
+            - 🔴 **Challenge insufficient security measures** in requirements
+
+            Your security expertise in requirements prevents attacks and protects systems - never compromise on security standards. If a ticket has security implications but lacks security requirements, STOP and demand them.
 
             ## Your Role: Ensuring Well-Written Tickets
 
