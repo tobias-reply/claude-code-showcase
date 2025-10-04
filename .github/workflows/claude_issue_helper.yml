@@ -50,8 +50,9 @@ jobs:
       - name: Configure AWS Credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ vars.AWS_ROLE_TO_ASSUME }}:role/github-actions-role
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: eu-central-1
+          audience: sts.amazonaws.com
 
       - uses: anthropics/claude-code-action@v1
         with:
