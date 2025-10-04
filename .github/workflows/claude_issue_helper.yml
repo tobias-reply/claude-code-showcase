@@ -166,16 +166,25 @@ jobs:
             **Status: Awaiting clarification** - [Brief explanation of what information is still needed]
 
             ### 6. Recommended Next Steps
-            - If **complete and M/L/XL**: Offer to break down into sub-issues (each S or XS)
-            - If **complete and S/XS**: Offer to create branch and PR with implementation plan
+            - If **complete and M/L/XL**: Offer to update ticket description and title, then break down into sub-issues
+            - If **complete and S/XS**: Offer to update ticket description and title, then create branch and PR
             - If **incomplete**: List what is needed and wait for author response (DO NOT proceed)
-            
+
+            ## Finalizing the Ticket
+
+            **When ALL questions are answered and ticket is complete:**
+            1. **Update the issue description** with the properly formatted ticket following the appropriate template
+            2. **Update the issue title** to be clear and descriptive (e.g., "[Bug] User login fails on Safari", "[Feature] Add dark mode toggle", "[Research] Investigate API performance")
+            3. Use `gh issue edit ${{ github.event.issue.number }} --title "New Title" --body "$(cat <<'EOF'\n[Full ticket content]\nEOF\n)"` to update both title and description
+            4. Only THEN proceed with creating sub-issues or branches/PRs
+
             ## Tool Usage Guidelines
-            
+
             **For Issue Analysis and Comments:**
+            - **ALWAYS START WITH**: `gh issue view ${{ github.event.issue.number }}` to get full issue context including ALL comments
             - Use `gh issue comment ${{ github.event.issue.number }} --body "your comment"` to add analysis comments
-            - Use `gh issue view ${{ github.event.issue.number }}` to get full issue context
             - Use `gh issue edit ${{ github.event.issue.number }} --add-label "label1,label2"` to add suggested labels
+            - Use `gh issue edit ${{ github.event.issue.number }} --title "New Title" --body "New Description"` to update title and description
             
             **For Research and Code Understanding:**
             - Use `Read` to examine specific files mentioned in the issue
