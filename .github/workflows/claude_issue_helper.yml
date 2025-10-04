@@ -12,8 +12,7 @@ on:
 jobs:
   claude-issue-analysis:
     if: contains(github.event.issue.labels.*.name, 'claude-agent')
-    runs-on: stormreply-runner
-    environment: dev
+    runs-on: ubuntu-latest
     env:
       AWS_REGION: eu-central-1
     steps:
