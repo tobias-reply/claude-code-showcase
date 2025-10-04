@@ -31,6 +31,11 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
+      - name: Install gh sub-issue extension
+        run: gh extension install yahsan2/gh-sub-issue
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
       - name: Read project information
         id: project-info
         run: |
@@ -249,12 +254,21 @@ jobs:
             - ⚠️ DO NOT use these tools to suggest how to implement - only to clarify what already exists
 
             **For Sub-issue Creation (when size > S, REQUIREMENTS ONLY):**
-            - Use `gh issue create --title "[Sub-issue] Title" --body "Requirements Description"`
+            - Use `gh sub-issue create` to create proper sub-issues linked to the parent
+            - Command syntax: `gh sub-issue create --parent ${{ github.event.issue.number }} --title "Title" --body "Requirements Description" --label "sub-issue"`
             - Each sub-issue contains ONLY requirements and acceptance criteria
             - NO implementation details, NO code suggestions, NO technical approaches
-            - Always reference the parent issue number in sub-issue descriptions
+            - Include size estimate in the title: "[S] Implement feature X" or "[XS] Fix bug Y"
             - Break down M/L/XL tasks into multiple S or XS sub-issues based on requirement scope
             - ⚠️ **PARENT ISSUES WITH SUB-ISSUES NEVER GET BRANCHES** - only the individual sub-issues get branches
+
+            Example:
+            ```bash
+            gh sub-issue create --parent 123 \
+              --title "[S] Add user authentication requirements" \
+              --body "## Requirements\n- Users must be able to log in\n- Support OAuth2\n\n## Acceptance Criteria\n- [ ] Login endpoint specified\n- [ ] OAuth2 flow documented" \
+              --label "sub-issue,requirements"
+            ```
 
             **For Branch Creation (when size is S or XS, with user permission):**
             - **CRITICAL**: Only create branches for issues WITHOUT sub-issues
@@ -280,4 +294,4 @@ jobs:
 
           claude_args: |
             --model eu.anthropic.claude-sonnet-4-20250514-v1:0
-            --allowedTools "Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh label create:*),Bash(gh label add:*),Bash(git checkout:*),Bash(git push:*),Read,Glob,Grep"
+            --allowedTools "Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh sub-issue create:*),Bash(gh label create:*),Bash(gh label add:*),Bash(git checkout:*),Bash(git push:*),Read,Glob,Grep"
