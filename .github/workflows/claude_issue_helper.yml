@@ -1,0 +1,136 @@
+name: Claude Issue Helper
+
+permissions:
+  contents: read
+  issues: write
+  id-token: write
+
+on:
+  issues:
+    types: [opened, reopened, edited, labeled]
+
+jobs:
+  claude-issue-analysis:
+    if: contains(github.event.issue.labels.*.name, 'claude-agent')
+    runs-on: stormreply-runner
+    environment: dev
+    env:
+      AWS_REGION: eu-central-1
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Read project information
+        id: project-info
+        run: |
+          if [ -f .claude/own_scripts/issue_pr_guide.md ]; then
+            ISSUE_PR_GUIDE=$(cat .claude/own_scripts/issue_pr_guide.md)
+          else
+            ISSUE_PR_GUIDE="No issue guide available"
+          fi
+          echo "ISSUE_PR_GUIDE<<EOF" >> $GITHUB_ENV
+          echo "$ISSUE_PR_GUIDE" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ROLE_TO_ASSUME }}:role/github-actions-role
+          aws-region: eu-central-1
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          github_token: ${{ steps.app-token.outputs.token }}
+          use_bedrock: "true"
+          prompt: |
+            REPO: ${{ github.repository }}
+            ISSUE NUMBER: ${{ github.event.issue.number }}
+            ISSUE TITLE: ${{ github.event.issue.title }}
+            ISSUE BODY: ${{ github.event.issue.body }}
+            ISSUE AUTHOR: ${{ github.event.issue.user.login }}
+
+            You are a requirements and project management expert helping with issue analysis and clarification.
+            
+            IMPORTANT: You are NOT allowed to make any code changes. Your role is purely for:
+            - Understanding and clarifying requirements
+            - Researching the issue and repository
+            - Asking the user clarifying questions
+            - Providing analysis and guidance
+            
+            Please:
+            1. Analyze the issue description and categorize it (bug, feature request, question, etc.)
+            2. Suggest relevant labels that should be applied
+            3. Identify if the issue is missing important information and ask the user specific clarifying questions through the issue comments
+            4. Ask the user to clarify any ambiguous requirements through the issue comments
+            5. Research the repository to understand the context and existing implementations
+            6. Cross-reference with similar existing issues if applicable
+            7. Estimate the size/complexity of the work required
+            
+            Focus on:
+            - Issue clarity and completeness through targeted questions
+            - Proper categorization and labeling
+            - Research-based understanding of the codebase
+            - Actionable next steps for the reporter or maintainers
+            - Effort estimation based on complexity
+            
+            Size Guidelines:
+            - XS: Very small tasks, quick fixes, typos (< 2 hours)
+            - S: Small features or bugs, minor changes (2-8 hours) 
+            - M: Medium features, moderate complexity (1-3 days)
+            - L: Large features, significant changes (3-7 days)
+            - XL: Very large features, major changes (1-2 weeks)
+            
+            Add your analysis as a comment on the issue with helpful information and suggestions.
+            
+            IMPORTANT: End your comment with a size estimate in this exact format:
+            **Size Estimate: [XS|S|M|L|XL]**
+            
+            After providing the size estimate:
+            - If size is M, L, or XL: Ask the user for permission and create sub-issues to break down the work into smaller, manageable pieces (each sub-issue should be S or XS)
+            - If size is S or XS: Ask the user for permission to create a branch and pull request with detailed implementation steps
+            
+            ## Tool Usage Guidelines
+            
+            **For Issue Analysis and Comments:**
+            - Use `gh issue comment ${{ github.event.issue.number }} --body "your comment"` to add analysis comments
+            - Use `gh issue view ${{ github.event.issue.number }}` to get full issue context
+            - Use `gh issue edit ${{ github.event.issue.number }} --add-label "label1,label2"` to add suggested labels
+            
+            **For Research and Code Understanding:**
+            - Use `Read` to examine specific files mentioned in the issue
+            - Use `Glob` to find relevant files by pattern (e.g., "**/*.js" for JavaScript files)
+            - Use `Grep` to search for specific functions, classes, or patterns in the codebase
+            
+            **For Sub-issue Creation (when size > S):**
+            - Use `gh issue create --title "[Sub-issue] Title" --body "Description" --label "sub-issue,other-labels"`
+            - Always reference the parent issue number in sub-issue descriptions
+            - Break down M/L/XL tasks into multiple S or XS sub-issues
+            
+            **For Branch/PR Creation (when size is S or XS, with user permission):**
+            - FIRST ask user: "This task is size [S/XS]. Would you like me to create a branch and PR with detailed implementation steps?"
+            - If approved, use `git checkout -b feature/issue-${{ github.event.issue.number }}-description`
+            - Use `gh pr create --title "Fix #${{ github.event.issue.number }}: Title" --body "Implementation plan"`
+            - Include detailed implementation steps in PR description
+            - Use `git push -u origin branch-name` to push the branch
+            
+            **Expected Output Format:**
+            1. Always start with issue analysis and categorization
+            2. Ask specific clarifying questions if information is missing
+            3. Provide research findings from codebase exploration
+            4. End with size estimate in the required format
+            5. Take appropriate action based on size (sub-issues or branch/PR request)
+
+            Project context information:
+            
+            ${{ env.ISSUE_PR_GUIDE }}
+
+          claude_args: |
+            --model eu.anthropic.claude-sonnet-4-20250514-v1:0
+            --allowedTools "Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh label create:*),Bash(gh label add:*),Bash(git checkout:*),Bash(git push:*),Bash(gh pr create:*),Read,Glob,Grep"
