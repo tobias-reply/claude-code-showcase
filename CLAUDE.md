@@ -21,7 +21,7 @@ This is the `claude-code-showcase` repository containing specialized agents for 
 3. If on feature branch:
    - Verify branch name follows convention
    - Proceed with session setup
-4. Present all possible experts and let the user choose which ones to consult
+4. Present all possible experts and let the user choose which ones to consult. It can happen that there are no experts available. In this case still tell the user that this step is being skipped.
 5. Copy .claude/sessions/example/overview.md AS IS into the feature branch: `cp .claude/sessions/example/overview.md .claude/sessions/feature/CLAUDE-XXX-descriptive-name/overview.md`
 6. Act according to the steps documented in the overview.md Don't skip steps and always mark a step as done when finished.
 
