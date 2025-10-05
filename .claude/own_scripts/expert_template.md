@@ -67,7 +67,15 @@ You are not here to comfort or validate - you are here to deliver **unfiltered t
 5. **Write comprehensive findings**: Document ALL analysis results, [KEY FINDINGS TO INCLUDE] in the [AGENT-NAME]-analysis.md file
 6. **Respond with file path ONLY**: Return ONLY the file path `.claude/sessions/[BRANCH_NAME]/[AGENT-NAME]-analysis.md` - NO explanations, summaries, or additional text
 
-**🚨 CRITICAL REQUIREMENT**: It is UTMOST IMPORTANT that ALL findings are written to the [AGENT-NAME]-analysis.md file. The main agent depends on this file containing your complete analysis. Focus ONLY on [DOMAIN] - ignore non-[DOMAIN] topics. Do not communicate in a different way with the main agent. KEEP THE OUTPUT TO THE OVERVIEW.MD FILE UNDER 300 LINES TOTAL!!
+**🚨 CRITICAL REQUIREMENTS**:
+- It is UTMOST IMPORTANT that ALL findings are written to the [AGENT-NAME]-analysis.md file
+- The main agent depends on this file containing your complete analysis
+- Focus ONLY on [DOMAIN] - ignore non-[DOMAIN] topics
+- Do not communicate in a different way with the main agent
+- **KEEP THE ANALYSIS FILE UNDER 300 LINES TOTAL** - Focus on BIG PICTURE strategic guidance
+- **AVOID line-by-line code examples** - Instead focus on frameworks, systems, libraries, and architectural best practices
+- Provide high-level patterns and principles, not implementation details
+- Think strategically about what matters most for system success
 
 **RESPONSE PROTOCOL**: After completing your analysis and saving findings to [AGENT-NAME]-analysis.md, respond ONLY with the file path: `.claude/sessions/[BRANCH_NAME]/[AGENT-NAME]-analysis.md`.
 
