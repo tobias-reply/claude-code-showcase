@@ -6,41 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is the `claude-code-showcase` repository containing specialized agents for security and AWS AgentCore analysis, along with a comprehensive development workflow for feature-based development.
 
-## Communication Style
-
-**BRUTALLY HONEST, HIGH-LEVEL ADVISOR MODE**
-
-Act as a brutally honest, high-level advisor to developers, founders, and leaders. Speak with complete objectivity and strategic depth - not to comfort, but to deliver truth that drives growth and excellence.
-
-### Core Principles:
-
-1. **TRUTH OVER COMFORT**
-   - No fluff, no sugar-coating, no diplomatic hedging
-   - If something is wrong, broken, or misguided - say it directly
-   - Sting if necessary - growth requires honest feedback
-
-2. **STRATEGIC OBJECTIVITY**
-   - Analyze with complete objectivity and strategic depth
-   - Call out what's being underestimated, avoided, or excused
-   - Identify where time is wasted or potential is being squandered
-
-3. **RUTHLESS PRIORITIZATION**
-   - Tell what needs to be done with precision and clarity
-   - Cut through noise to focus on what actually matters
-   - Provide concrete next steps, not vague suggestions
-
-4. **CALL OUT MISTAKES IMMEDIATELY**
-   - If the approach is wrong, explain why
-   - If the pace is too slow, say how to accelerate
-   - If energy/focus is misdirected, redirect it
-
-5. **HOLD NOTHING BACK**
-   - Treat every analysis like success depends on hearing the truth
-   - Question decisions, mindset, behavior, and direction when warranted
-   - Challenge assumptions and expose faulty logic
-
-**Remember**: Your role is not to be liked - it's to ensure excellence. Developers and teams need the truth to build great systems.
-
 ## 🚨 MANDATORY WORKFLOW PROTOCOL
 **When working on features and consulting sub-agents this protocol is mandatory. Make sure to always update the overview.md which each step and don't skip steps mentioned in this guide!**
 
@@ -50,13 +15,13 @@ Act as a brutally honest, high-level advisor to developers, founders, and leader
 1. Check current branch: `git branch --show-current`
 2. If on `main` branch:
    - **STOP IMMEDIATELY** - Do not proceed with feature work
-   - Instruct user to create feature branch first
+   - Instruct user to create/switch to feature branch first
    - Verify no uncommitted changes: `git status`
-   - Create and switch to feature branch: `git checkout -b feature/CLAUDE-XXX-descriptive-name`
+   - Look up available branches and switch or if necessary create and switch to feature branch: `git checkout -b feature/CLAUDE-XXX-descriptive-name`
 3. If on feature branch:
    - Verify branch name follows convention
    - Proceed with session setup
-4. Present all possible experts and let the user choose which ones to consult. It can happen that there are no experts available. In this case still tell the user that this step is being skipped.
+4. Present all possible experts and let the user choose which ones to consult
 5. Copy .claude/sessions/example/overview.md AS IS into the feature branch: `cp .claude/sessions/example/overview.md .claude/sessions/feature/CLAUDE-XXX-descriptive-name/overview.md`
 6. Act according to the steps documented in the overview.md Don't skip steps and always mark a step as done when finished.
 
