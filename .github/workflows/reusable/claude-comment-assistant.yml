@@ -1,0 +1,85 @@
+name: Reusable Claude Comment Assistant
+
+on:
+  workflow_call:
+    inputs:
+      aws_region:
+        description: 'AWS region for Bedrock access'
+        required: false
+        type: string
+        default: 'eu-central-1'
+      claude_model:
+        description: 'Claude model to use (e.g., eu.anthropic.claude-sonnet-4-5-20250929-v1:0)'
+        required: false
+        type: string
+        default: 'eu.anthropic.claude-sonnet-4-5-20250929-v1:0'
+      max_turns:
+        description: 'Maximum number of conversation turns'
+        required: false
+        type: number
+        default: 10
+      use_bedrock:
+        description: 'Whether to use AWS Bedrock (true) or Anthropic API (false)'
+        required: false
+        type: string
+        default: 'true'
+      comment_trigger:
+        description: 'Trigger phrase in comments to activate Claude (e.g., @claude)'
+        required: false
+        type: string
+        default: '@claude'
+    secrets:
+      app_id:
+        description: 'GitHub App ID for authentication'
+        required: true
+      app_private_key:
+        description: 'GitHub App private key'
+        required: true
+      aws_role_to_assume:
+        description: 'AWS IAM role ARN for OIDC authentication (required if use_bedrock is true)'
+        required: false
+      anthropic_api_key:
+        description: 'Anthropic API key (required if use_bedrock is false)'
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  claude-comment-assistant:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, inputs.comment_trigger)) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, inputs.comment_trigger)) ||
+      (github.event_name == 'issues' && contains(github.event.issue.body, inputs.comment_trigger))
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ inputs.aws_region }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.app_id }}
+          private-key: ${{ secrets.app_private_key }}
+
+      - name: Configure AWS Credentials (OIDC)
+        if: inputs.use_bedrock == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.aws_role_to_assume }}
+          aws-region: ${{ inputs.aws_region }}
+          audience: sts.amazonaws.com
+
+      - name: Run Claude Code Action
+        uses: anthropics/claude-code-action@v1
+        with:
+          github_token: ${{ steps.app-token.outputs.token }}
+          use_bedrock: ${{ inputs.use_bedrock }}
+          anthropic_api_key: ${{ inputs.use_bedrock == 'false' && secrets.anthropic_api_key || '' }}
+          claude_args: '--model ${{ inputs.claude_model }} --max-turns ${{ inputs.max_turns }}'
