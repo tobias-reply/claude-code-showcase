@@ -22,8 +22,8 @@ jobs:
   claude-issue-analysis:
     if: |
       !contains(github.event.issue.labels.*.name, 'no-claude-agent') &&
-      github.actor != 'claude-code-integration-base' &&
-      github.actor != 'claude-code-integration-base[bot]'
+      github.actor != 'reply-action-reviewer' &&
+      github.actor != 'reply-action-reviewer[bot]'
     runs-on: ubuntu-latest
     env:
       AWS_REGION: eu-central-1
